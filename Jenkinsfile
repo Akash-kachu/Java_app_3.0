@@ -10,7 +10,7 @@ pipeline{
         choice(name: 'action', choices: 'create\ndelete', description: 'Choose create/Destroy')
         string(name: 'ImageName', description: "name of the docker build", defaultValue: 'javapp')
         string(name: 'ImageTag', description: "tag of the docker build", defaultValue: 'v1')
-        string(name: 'DockerHubUser', description: "name of the Application", defaultValue: 'praveensingam1994')
+        string(name: 'DockerHubUser', description: "name of the Application", defaultValue: 'akash021095')
     }
 
     stages{
@@ -20,7 +20,7 @@ pipeline{
             steps{
             gitCheckout(
                 branch: "main",
-                url: "https://github.com/praveen1994dec/Java_app_3.0.git"
+                url: "https://github.com/Akash-kachu/Java_app_3.0.git"
             )
             }
         }
@@ -91,6 +91,16 @@ pipeline{
                }
             }
         }
+
+               stage ('Pushing Jfrog File'){
+          when { expression {  params.action == 'create' } }
+          steps{
+            script{
+                 sh 'curl -X PUT -u admin:Akash@021095-T  /var/lib/jenkins/workspace/java-3.0/target/kubernetes-configmap-reload-0.0.1-SNAPSHOT.jar "http://54.144.240.231:8082/artifactory/example-repo-local/kubernetes-configmap-reload-0.0.1-SNAPSHOT.jar"'
+                }
+          }
+       }
+
         stage('Docker Image Push : DockerHub '){
          when { expression {  params.action == 'create' } }
             steps{
